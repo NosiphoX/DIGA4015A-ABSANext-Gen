@@ -535,3 +535,112 @@ details p {
     flex-direction: column;
   }
 }
+
+
+/*simulation lab*/
+
+.featured-banner {
+  background: var(--gradient-soft);
+  color: var(--white);
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.simulation-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.simulation-main,
+.simulation-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.studio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.studio-card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.studio-audience {
+  margin-top: 1rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.info-list {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+.disabled-btn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.studio-detail-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+}
+
+.studio-inputs,
+.studio-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.education-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.education-note {
+  padding: 1rem;
+  border-radius: 14px;
+  background: var(--bg-main);
+}
+
+.education-note h4 {
+  margin-bottom: 0.5rem;
+}
+
+.verdict-badge {
+  display: inline-block;
+  margin: 1rem 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(226, 54, 76, 0.1);
+  color: var(--red-primary);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .simulation-layout,
+  .studio-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
