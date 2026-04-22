@@ -10,7 +10,7 @@ import StudioRentVsBuy from "./pages/StudioRentVsBuy";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/DIGA4015A-ABSANext-Gen/">
       <Navbar />
 
       <div className="container">
