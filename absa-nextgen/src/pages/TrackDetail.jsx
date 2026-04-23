@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Card from "../components/Card";
+import useUser from "../context/useUser";
 
 function TrackDetail() {
+  const { user } = useUser();
+
   const [milestones, setMilestones] = useState([
     {
       year: "Year 1",
@@ -15,7 +18,7 @@ function TrackDetail() {
       title: "Pay Off High-Interest Debt",
       description:
         "Reduce credit card and personal loan debt to improve affordability.",
-      status: "In Progress",
+      status: user.debt > 10000 ? "In Progress" : "Done",
     },
     {
       year: "Year 3",
@@ -39,6 +42,18 @@ function TrackDetail() {
       status: "Not Started",
     },
   ]);
+
+  const totalIncome = user.monthlyIncome + user.sideIncome;
+
+  const totalExpenses =
+    user.rent +
+    user.carPayment +
+    user.insurance +
+    user.medicalAid +
+    user.subscriptions +
+    user.food;
+
+  const monthlyLeftover = totalIncome - totalExpenses;
 
   const toggleStatus = (index) => {
     const updatedMilestones = [...milestones];
@@ -72,6 +87,18 @@ function TrackDetail() {
           for buying property without damaging their financial stability.
         </p>
       </section>
+
+      <div className="context-banner">
+        <div>
+          <h4>Why this track fits your profile</h4>
+          <p>
+            Based on your current numbers, you have about{" "}
+            <strong>R{monthlyLeftover.toLocaleString()}</strong> left after
+            monthly expenses. This track helps turn that into a structured
+            deposit and affordability plan.
+          </p>
+        </div>
+      </div>
 
       <Card>
         <h3>Track Progress</h3>
@@ -110,12 +137,11 @@ function TrackDetail() {
       </section>
 
       <Card>
-        <h3>Why This Track Works</h3>
+        <h3>Personalised Recommendation</h3>
         <p>
-          Buying a property too early can place pressure on your finances,
-          especially if you still have debt or no emergency savings. This track
-          helps you prepare gradually so that when you buy, you can do it more
-          sustainably.
+          With your current income and expenses, a realistic next step would be
+          to prioritise debt control, then consistently direct leftover cash
+          toward a deposit fund before taking on a bond.
         </p>
       </Card>
     </div>

@@ -633,6 +633,18 @@ details p {
   font-weight: 700;
 }
 
+.affordability-card.warning {
+  border-left: 5px solid var(--red-primary);
+}
+
+.affordability-card.moderate {
+  border-left: 5px solid var(--blue-primary);
+}
+
+.affordability-card.good {
+  border-left: 5px solid #2ecc71;
+}
+
 @media (max-width: 900px) {
   .simulation-layout,
   .studio-detail-layout {

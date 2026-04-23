@@ -3,24 +3,11 @@ import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
 import { formatCurrency } from "../utils/formatters";
+import { useUser } from "../context/useUser";
 
 function Dashboard() {
   const [showBanner, setShowBanner] = useState(true);
-
-  const [user, setUser] = useState({
-    name: "Lerato",
-    monthlyIncome: 38000,
-    sideIncome: 2000,
-    rent: 12000,
-    carPayment: 5500,
-    insurance: 1800,
-    medicalAid: 2200,
-    subscriptions: 1000,
-    food: 4000,
-    debt: 15000,
-    savings: 0,
-    goal: "Build an emergency fund",
-  });
+  const { user, setUser } = useUser();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -43,9 +30,11 @@ function Dashboard() {
 
   const monthlyLeftover = totalIncome - totalExpenses;
 
-  const savingsRate = Math.round((monthlyLeftover / totalIncome) * 100);
+  const savingsRate =
+    totalIncome > 0 ? Math.round((monthlyLeftover / totalIncome) * 100) : 0;
 
-  const expenseRatio = Math.round((totalExpenses / totalIncome) * 100);
+  const expenseRatio =
+    totalIncome > 0 ? Math.round((totalExpenses / totalIncome) * 100) : 0;
 
   const financialHealth =
     savingsRate >= 20
@@ -61,9 +50,9 @@ function Dashboard() {
       ? "First Property Path"
       : "Balanced Lifestyle & Investing";
 
-  const goalProgress = Math.min(
-    Math.round((monthlyLeftover / 5000) * 100),
-    100
+  const goalProgress = Math.max(
+    0,
+    Math.min(Math.round((monthlyLeftover / 5000) * 100), 100)
   );
 
   let insightMessage = "";
@@ -101,6 +90,16 @@ function Dashboard() {
         </div>
 
         <div className="input-grid">
+          <div className="input-group">
+            <label>Name</label>
+            <input
+              type="text"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+            />
+          </div>
+
           <div className="input-group">
             <label>Monthly Salary</label>
             <input
@@ -205,7 +204,7 @@ function Dashboard() {
 
       <div className="page-header dashboard-header">
         <div>
-          <p className="dashboard-date">21 April 2026</p>
+          <p className="dashboard-date">23 April 2026</p>
           <h2>Hello, {user.name}</h2>
           <p>
             Here is your current financial snapshot and what deserves your
