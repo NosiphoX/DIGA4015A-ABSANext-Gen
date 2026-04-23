@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
 import { formatCurrency } from "../utils/formatters";
-import  useUser from "../context/useUser";
+import useUser from "../context/useUser";
 
 function Dashboard() {
   const [showBanner, setShowBanner] = useState(true);
@@ -55,27 +55,36 @@ function Dashboard() {
     Math.min(Math.round((monthlyLeftover / 5000) * 100), 100)
   );
 
+  let insightTitle = "";
   let insightMessage = "";
   let insightDetails = "";
+  let insightState = "";
 
-  if (savingsRate < 10) {
+  if (user.debt >= 15000 || savingsRate < 5 || monthlyLeftover <= 0) {
+    insightState = "risk";
+    insightTitle = "You may be under financial pressure";
     insightMessage =
-      "You are saving less than 10% of your income. This could leave you financially vulnerable.";
-
+      "Your current debt or spending levels may slow down your goals and leave very little room for emergencies.";
     insightDetails =
-      "A healthy starting point is to save at least 10% to 20% of your monthly income. Building an emergency fund should come before aggressive investing.";
-  } else if (user.debt > 10000) {
+      "Right now, your best move is to stabilise your finances. Focus on reducing expensive debt, avoiding new unnecessary commitments, and creating more breathing room in your monthly budget before pushing toward bigger goals like property or investing.";
+  } else if (
+    (user.debt > 0 && user.debt < 15000) ||
+    (savingsRate >= 5 && savingsRate < 15) ||
+    monthlyLeftover < 8000
+  ) {
+    insightState = "caution";
+    insightTitle = "You are doing okay, but you could drift off track";
     insightMessage =
-      "Your debt level is high compared to your savings. Reducing debt should be a priority.";
-
+      "Your finances are relatively stable, but your current margin is still tight enough that debt or rising costs could affect your progress.";
     insightDetails =
-      "High-interest debt such as credit cards can grow quickly over time and reduce your ability to invest or save for bigger goals.";
+      "This is a good stage to become more intentional. Reducing debt faster, increasing your leftover cash, and building a stronger emergency fund now can prevent future pressure and help you stay aligned with your goals.";
   } else {
+    insightState = "strong";
+    insightTitle = "You are in a strong position";
     insightMessage =
-      "You are making healthy progress and have a good balance between spending and saving.";
-
+      "Your finances show good stability, and you appear to have healthy room to save or invest toward bigger goals.";
     insightDetails =
-      "Keep building consistency by maintaining your savings habits and gradually increasing investment contributions.";
+      "Keep doing what is working. You can now focus on building long-term wealth more confidently through investing, deposit saving, or strengthening your financial protection without putting too much pressure on your monthly cash flow.";
   }
 
   return (
@@ -351,12 +360,13 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-sidebar">
-          <Card>
+          <Card className={`insight-card ${insightState}`}>
             <div className="card-title-row">
               <h3>Financial Insight</h3>
-              <Tooltip text="These insights are generated based on your savings rate, debt, and expenses." />
+              <Tooltip text="These insights are generated based on your debt, leftover money, and overall savings position." />
             </div>
 
+            <p className="insight-title">{insightTitle}</p>
             <p className="insight-text">{insightMessage}</p>
 
             <details>
