@@ -43,13 +43,6 @@ function Dashboard() {
       ? "Moderate"
       : "Needs Attention";
 
-  const recommendedTrack =
-    user.debt > 10000
-      ? "Financial Reset & Foundation Builder"
-      : user.rent > 10000
-      ? "First Property Path"
-      : "Balanced Lifestyle & Investing";
-
   const goalProgress = Math.max(
     0,
     Math.min(Math.round((monthlyLeftover / 5000) * 100), 100)
@@ -85,6 +78,35 @@ function Dashboard() {
       "Your finances show good stability, and you appear to have healthy room to save or invest toward bigger goals.";
     insightDetails =
       "Keep doing what is working. You can now focus on building long-term wealth more confidently through investing, deposit saving, or strengthening your financial protection without putting too much pressure on your monthly cash flow.";
+  }
+
+  let recommendedTrack = "";
+  let recommendedTrackMessage = "";
+
+  if (user.debt >= 15000 || monthlyLeftover <= 0 || savingsRate < 5) {
+    recommendedTrack = "Financial Reset & Foundation Builder";
+    recommendedTrackMessage =
+      "Your current debt or low monthly breathing room suggests that building stability should come first. Focus on reducing debt and creating a stronger financial foundation before taking on bigger commitments.";
+  } else if (
+    user.debt < 15000 &&
+    monthlyLeftover >= 5000 &&
+    monthlyLeftover < 12000
+  ) {
+    recommendedTrack = "Balanced Lifestyle & Investing";
+    recommendedTrackMessage =
+      "You are in a more stable position, but not yet at maximum flexibility. This track helps you balance enjoying your income now while steadily building long-term wealth.";
+  } else if (
+    user.debt === 0 &&
+    monthlyLeftover >= 12000 &&
+    savingsRate >= 20
+  ) {
+    recommendedTrack = "First Property Path";
+    recommendedTrackMessage =
+      "You appear to have enough monthly capacity and stability to begin thinking more seriously about a future property deposit and affordability planning.";
+  } else {
+    recommendedTrack = "Balanced Lifestyle & Investing";
+    recommendedTrackMessage =
+      "Your finances show some positive momentum, and a balanced approach may help you keep growing without putting too much pressure on your lifestyle.";
   }
 
   return (
@@ -377,29 +399,8 @@ function Dashboard() {
 
           <Card>
             <h3>Recommended Strategy Track</h3>
-
             <p className="recommendation-title">{recommendedTrack}</p>
-
-            {recommendedTrack === "Financial Reset & Foundation Builder" && (
-              <p>
-                Your debt levels are high relative to your savings. Focus on
-                reducing debt and building an emergency fund first.
-              </p>
-            )}
-
-            {recommendedTrack === "First Property Path" && (
-              <p>
-                Your rental costs are high, which may mean you are ready to
-                start planning for a home deposit and future bond affordability.
-              </p>
-            )}
-
-            {recommendedTrack === "Balanced Lifestyle & Investing" && (
-              <p>
-                Your spending is relatively balanced, which means you can begin
-                focusing on long-term investing and wealth growth.
-              </p>
-            )}
+            <p>{recommendedTrackMessage}</p>
           </Card>
 
           <Card>

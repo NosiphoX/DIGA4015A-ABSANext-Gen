@@ -445,6 +445,24 @@ details p {
   border-radius: 999px;
 }
 
+.insight-card.risk {
+  border-left: 5px solid var(--red-primary);
+}
+
+.insight-card.caution {
+  border-left: 5px solid #f59e0b;
+}
+
+.insight-card.strong {
+  border-left: 5px solid #2ecc71;
+}
+
+.insight-title {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+
 /*Tracks*/
 
 .tracks-overview-grid {
