@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
 import { formatCurrency } from "../utils/formatters";
-import { useUser } from "../context/useUser";
+import  useUser from "../context/useUser";
 
 function Dashboard() {
   const [showBanner, setShowBanner] = useState(true);
