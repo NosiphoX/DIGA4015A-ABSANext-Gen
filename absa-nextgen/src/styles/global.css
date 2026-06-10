@@ -1786,4 +1786,1169 @@ details p {
     align-items: flex-start;
   }
 }
+/* ================================
+   STRATEGY TRACKS EXPERIENCE
+================================ */
 
+.tracks-experience,
+.track-detail-experience {
+  display: grid;
+  gap: 2.4rem;
+  padding-bottom: 4rem;
+}
+
+.tracks-hero,
+.track-detail-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 2rem;
+  align-items: center;
+  padding: 3.2rem;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at top left, rgba(251, 208, 216, 0.75), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(201, 224, 248, 0.9), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(245, 246, 247, 0.9));
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  box-shadow: 0 26px 70px rgba(31, 41, 55, 0.11);
+  overflow: hidden;
+  position: relative;
+}
+
+.tracks-hero h1,
+.track-detail-hero h1 {
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.tracks-hero p,
+.track-detail-hero p,
+.track-context-panel p,
+.track-philosophy-section p,
+.track-progress-panel p {
+  color: var(--text-light);
+  line-height: 1.85;
+}
+
+.track-orb,
+.track-progress-orb {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.4rem;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.85), transparent 28%),
+    linear-gradient(135deg, var(--red-primary), var(--blue-primary));
+  box-shadow: 0 24px 55px rgba(74, 157, 226, 0.28);
+  position: relative;
+  z-index: 1;
+}
+
+.track-orb span,
+.track-orb small,
+.track-progress-orb span,
+.track-progress-orb small {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 800;
+}
+
+.track-orb strong,
+.track-progress-orb strong {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.tracks-guidance-panel,
+.track-context-panel,
+.track-progress-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2.3rem;
+  border-radius: 34px;
+  background: var(--text-dark);
+  color: var(--white);
+  box-shadow: 0 24px 60px rgba(31, 41, 55, 0.16);
+}
+
+.tracks-guidance-panel h2,
+.track-context-panel h2,
+.track-progress-panel h2 {
+  color: var(--white);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.08;
+  margin: 0.6rem 0 0.9rem;
+}
+
+.tracks-guidance-panel p,
+.track-context-panel p,
+.track-progress-panel p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.tracks-mini-stats,
+.track-context-stats {
+  display: grid;
+  gap: 1rem;
+}
+
+.tracks-mini-stats div,
+.track-context-stats div {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.2rem;
+  border-radius: 22px;
+}
+
+.tracks-mini-stats span,
+.track-context-stats span {
+  display: block;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+}
+
+.tracks-mini-stats strong,
+.track-context-stats strong {
+  color: var(--white);
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.tracks-pathway {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.track-path-card {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  border-radius: 30px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.track-path-card.recommended-path {
+  border-left: 6px solid var(--red-primary);
+  background:
+    radial-gradient(circle at top right, rgba(251, 208, 216, 0.65), transparent 35%),
+    var(--white);
+}
+
+.track-path-number {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: var(--text-dark);
+  color: var(--white);
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.track-path-content h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  margin-bottom: 0.8rem;
+}
+
+.track-path-content p {
+  color: var(--text-light);
+  line-height: 1.85;
+  max-width: 850px;
+}
+
+.track-focus-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.3rem 0 1.5rem;
+}
+
+.track-focus-tags span {
+  padding: 0.7rem 0.95rem;
+  border-radius: 999px;
+  background: var(--bg-main);
+  border: 1px solid var(--bg-soft);
+  font-weight: 800;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+}
+
+.track-philosophy-section {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+}
+
+.track-progress-bar {
+  height: 18px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.track-progress-bar div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--red-primary), var(--blue-soft));
+  transition: width 0.35s ease;
+}
+
+.milestone-timeline {
+  display: grid;
+  gap: 1.2rem;
+  position: relative;
+}
+
+.milestone-card {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 1.2rem;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.milestone-card.status-done {
+  border-left: 6px solid #2ecc71;
+}
+
+.milestone-card.status-in-progress {
+  border-left: 6px solid var(--blue-primary);
+}
+
+.milestone-card.status-not-started {
+  border-left: 6px solid var(--bg-soft);
+}
+
+.milestone-index {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-main);
+  color: var(--red-primary);
+  font-weight: 900;
+}
+
+.milestone-content p {
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+.track-tradeoff-section {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.tradeoff-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.tradeoff-list .card {
+  border-radius: 24px;
+}
+
+.tradeoff-list p {
+  color: var(--text-light);
+  line-height: 1.8;
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .tracks-hero,
+  .track-detail-hero,
+  .tracks-guidance-panel,
+  .track-context-panel,
+  .track-progress-panel,
+  .track-philosophy-section,
+  .track-tradeoff-section {
+    grid-template-columns: 1fr;
+  }
+
+  .track-orb,
+  .track-progress-orb {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tracks-hero,
+  .track-detail-hero,
+  .tracks-guidance-panel,
+  .track-context-panel,
+  .track-progress-panel {
+    padding: 2rem;
+  }
+
+  .tracks-hero h1,
+  .track-detail-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .track-path-card,
+  .milestone-card {
+    grid-template-columns: 1fr;
+  }
+
+  .track-path-number,
+  .milestone-index {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* ================================
+   MILESTONE STATUS CONTROLS
+================================ */
+
+.milestone-status-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+}
+
+.milestone-choice-btn {
+  border: 1px solid var(--bg-soft);
+  background: var(--white);
+  color: var(--text-light);
+  padding: 0.62rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+    color 0.18s ease, border-color 0.18s ease;
+}
+
+.milestone-choice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(31, 41, 55, 0.08);
+}
+
+.milestone-choice-btn.active.status-not-started {
+  background: var(--bg-soft);
+  color: var(--text-dark);
+  border-color: var(--bg-soft);
+}
+
+.milestone-choice-btn.active.status-in-progress {
+  background: rgba(74, 157, 226, 0.12);
+  color: var(--blue-primary);
+  border-color: rgba(74, 157, 226, 0.35);
+}
+
+.milestone-choice-btn.active.status-done {
+  background: rgba(46, 204, 113, 0.13);
+  color: #1f9d55;
+  border-color: rgba(46, 204, 113, 0.35);
+}
+
+.milestone-card.status-done .milestone-index {
+  background: rgba(46, 204, 113, 0.13);
+  color: #1f9d55;
+}
+
+.milestone-card.status-in-progress .milestone-index {
+  background: rgba(74, 157, 226, 0.12);
+  color: var(--blue-primary);
+}
+
+.milestone-card.status-not-started .milestone-index {
+  background: var(--bg-main);
+  color: var(--text-light);
+}
+
+@media (max-width: 768px) {
+  .milestone-status-controls {
+    justify-content: flex-start;
+  }
+
+  .milestone-choice-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* ================================
+   SIMULATION LAB EXPERIENCE
+================================ */
+
+.simulation-experience {
+  display: grid;
+  gap: 2.4rem;
+  padding-bottom: 4rem;
+}
+
+.simulation-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 2rem;
+  align-items: center;
+  padding: 3.2rem;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at top left, rgba(251, 208, 216, 0.75), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(201, 224, 248, 0.9), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(245, 246, 247, 0.9));
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  box-shadow: 0 26px 70px rgba(31, 41, 55, 0.11);
+  overflow: hidden;
+  position: relative;
+}
+
+.simulation-hero::after {
+  content: "";
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  right: -130px;
+  top: -120px;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 54, 76, 0.18);
+}
+
+.simulation-hero h1 {
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.simulation-hero p {
+  max-width: 760px;
+  line-height: 1.85;
+  color: var(--text-light);
+}
+
+.simulation-orb {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.4rem;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.86), transparent 28%),
+    linear-gradient(135deg, var(--blue-primary), var(--red-primary));
+  box-shadow: 0 24px 55px rgba(74, 157, 226, 0.28);
+  position: relative;
+  z-index: 1;
+}
+
+.simulation-orb span,
+.simulation-orb small {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 800;
+}
+
+.simulation-orb strong {
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+
+.simulation-guidance-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2.3rem;
+  border-radius: 34px;
+  background: var(--text-dark);
+  color: var(--white);
+  box-shadow: 0 24px 60px rgba(31, 41, 55, 0.16);
+}
+
+.simulation-guidance-panel h2 {
+  color: var(--white);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.08;
+  margin: 0.6rem 0 0.9rem;
+}
+
+.simulation-guidance-panel p {
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.85;
+}
+
+.simulation-mini-stats {
+  display: grid;
+  gap: 1rem;
+}
+
+.simulation-mini-stats div {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.2rem;
+  border-radius: 22px;
+}
+
+.simulation-mini-stats span {
+  display: block;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+}
+
+.simulation-mini-stats strong {
+  color: var(--white);
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.featured-studio-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2.3rem;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(251, 208, 216, 0.65), transparent 35%),
+    var(--white);
+  border: 1px solid var(--bg-soft);
+  box-shadow: 0 18px 46px rgba(31, 41, 55, 0.08);
+}
+
+.featured-studio-panel h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.08;
+  margin: 0.5rem 0 0.8rem;
+}
+
+.featured-studio-panel p {
+  color: var(--text-light);
+  line-height: 1.85;
+}
+
+.simulation-studio-path {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.simulation-studio-card {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  border-radius: 30px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.simulation-studio-card.featured-studio-card {
+  border-left: 6px solid var(--red-primary);
+  background:
+    radial-gradient(circle at top right, rgba(251, 208, 216, 0.65), transparent 35%),
+    var(--white);
+}
+
+.studio-number {
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: var(--text-dark);
+  color: var(--white);
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.studio-card-content h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  margin-bottom: 0.8rem;
+}
+
+.studio-card-content p {
+  color: var(--text-light);
+  line-height: 1.85;
+  max-width: 850px;
+}
+
+.studio-theme {
+  color: var(--text-light);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.studio-signal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.studio-signal-row span {
+  color: var(--red-primary);
+  font-weight: 900;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.simulation-help-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 0.85fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 980px) {
+  .simulation-hero,
+  .simulation-guidance-panel,
+  .featured-studio-panel,
+  .simulation-help-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .simulation-orb {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .simulation-hero,
+  .simulation-guidance-panel,
+  .featured-studio-panel {
+    padding: 2rem;
+  }
+
+  .simulation-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .simulation-studio-card {
+    grid-template-columns: 1fr;
+  }
+
+  .studio-number {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* ================================
+   SHARED STUDIO DETAIL EXPERIENCE
+================================ */
+
+.studio-detail-experience {
+  display: grid;
+  gap: 2.4rem;
+  padding-bottom: 4rem;
+}
+
+.studio-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 2rem;
+  align-items: center;
+  padding: 3.2rem;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at top left, rgba(251, 208, 216, 0.75), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(201, 224, 248, 0.9), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(245, 246, 247, 0.9));
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  box-shadow: 0 26px 70px rgba(31, 41, 55, 0.11);
+  overflow: hidden;
+  position: relative;
+}
+
+.studio-hero::after {
+  content: "";
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  right: -130px;
+  top: -120px;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 54, 76, 0.18);
+}
+
+.studio-hero h1 {
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.studio-hero p {
+  max-width: 760px;
+  line-height: 1.85;
+  color: var(--text-light);
+}
+
+.verdict-card {
+  border-left: 6px solid var(--red-primary);
+  background:
+    radial-gradient(circle at top right, rgba(251, 208, 216, 0.65), transparent 35%),
+    var(--white);
+}
+
+.verdict-card h2 {
+  line-height: 1.2;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+/* ================================
+   PREMIUM STUDIO CONTROLS
+================================ */
+
+.studio-control-card {
+  padding: 2rem;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(201, 224, 248, 0.7), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(251, 208, 216, 0.55), transparent 38%),
+    rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  box-shadow: 0 22px 55px rgba(31, 41, 55, 0.09);
+  position: relative;
+  overflow: hidden;
+}
+
+.studio-control-card::before {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  right: -90px;
+  top: -100px;
+  border-radius: 50%;
+  border: 1px solid rgba(74, 157, 226, 0.22);
+  pointer-events: none;
+}
+
+.studio-control-card .card-title-row {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.7rem;
+}
+
+.studio-control-card h3 {
+  font-size: 1.45rem;
+}
+
+.studio-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.studio-control-card .floating-field {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  border-radius: 24px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 10px 25px rgba(31, 41, 55, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.studio-control-card .floating-field:hover {
+  transform: translateY(-2px);
+  background: var(--white);
+  border-color: rgba(74, 157, 226, 0.3);
+  box-shadow: 0 14px 32px rgba(31, 41, 55, 0.08);
+}
+
+.studio-control-card .floating-field:focus-within {
+  background: var(--white);
+  border-color: rgba(226, 54, 76, 0.35);
+  box-shadow: 0 0 0 4px rgba(226, 54, 76, 0.08),
+    0 14px 32px rgba(31, 41, 55, 0.08);
+}
+
+.studio-control-card .floating-field label {
+  color: var(--text-light);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.studio-control-card .floating-field input,
+.studio-control-card .floating-field select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0 0;
+  min-height: 40px;
+  border-radius: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  outline: none;
+}
+
+.studio-control-card .floating-field input:focus,
+.studio-control-card .floating-field select:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.studio-results .card {
+  border-radius: 28px;
+}
+
+.studio-results h2 {
+  line-height: 1.2;
+}
+
+@media (max-width: 980px) {
+  .studio-hero,
+  .studio-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .studio-control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .studio-control-card {
+    padding: 1.5rem;
+  }
+
+  .studio-hero {
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .studio-hero h1 {
+    font-size: 2.5rem;
+  }
+}
+
+/* ================================
+   RENT VS BUY PROFILE PANEL
+================================ */
+
+.studio-profile-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 430px;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2.3rem;
+  border-radius: 34px;
+  background: var(--text-dark);
+  color: var(--white);
+  box-shadow: 0 24px 60px rgba(31, 41, 55, 0.16);
+}
+
+.studio-profile-panel h2 {
+  color: var(--white);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.08;
+  margin: 0.6rem 0 0.9rem;
+}
+
+.studio-profile-panel p {
+  color: rgba(255, 255, 255, 0.76);
+  line-height: 1.85;
+}
+
+@media (max-width: 980px) {
+  .studio-profile-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================================
+   AUTH EXPERIENCE
+================================ */
+
+.auth-experience {
+  display: grid;
+  gap: 2.4rem;
+  padding-bottom: 4rem;
+}
+
+.auth-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 2rem;
+  align-items: center;
+  padding: 3.2rem;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at top left, rgba(251, 208, 216, 0.75), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(201, 224, 248, 0.9), transparent 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(245, 246, 247, 0.9));
+  border: 1px solid rgba(232, 234, 237, 0.95);
+  box-shadow: 0 26px 70px rgba(31, 41, 55, 0.11);
+}
+
+.auth-hero h1 {
+  font-size: clamp(2.7rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.auth-hero p {
+  color: var(--text-light);
+  line-height: 1.85;
+  max-width: 720px;
+}
+
+.auth-orb {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.4rem;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.86), transparent 28%),
+    linear-gradient(135deg, var(--blue-primary), var(--red-primary));
+  box-shadow: 0 24px 55px rgba(74, 157, 226, 0.28);
+}
+
+.auth-orb span,
+.auth-orb small {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 800;
+}
+
+.auth-orb strong {
+  font-size: 1.6rem;
+}
+
+.auth-layout {
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(760px, 100%);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background: var(--bg-main);
+  border-radius: 999px;
+  padding: 0.35rem;
+  margin-bottom: 1.7rem;
+}
+
+.auth-tabs button {
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.9rem 1rem;
+  font-weight: 900;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.auth-tabs button.active {
+  background: var(--white);
+  color: var(--red-primary);
+  box-shadow: 0 8px 24px rgba(31, 41, 55, 0.08);
+}
+
+.auth-status-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(226, 54, 76, 0.08);
+  color: var(--red-primary);
+  font-weight: 800;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  margin-top: 1.4rem;
+  justify-content: center;
+}
+
+.auth-disclaimer {
+  margin-top: 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.profile-account-card {
+  border-left: 6px solid var(--blue-primary);
+  background:
+    radial-gradient(circle at top right, rgba(201, 224, 248, 0.6), transparent 36%),
+    var(--white);
+}
+
+@media (max-width: 860px) {
+  .auth-hero {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+  }
+
+  .auth-orb {
+    width: 190px;
+    height: 190px;
+  }
+}
+
+/* ================================
+   PROFILE ACCOUNT ACCESS CARD
+================================ */
+
+.profile-account-card {
+  border-left: 6px solid var(--blue-primary);
+  background:
+    radial-gradient(circle at top right, rgba(201, 224, 248, 0.65), transparent 36%),
+    radial-gradient(circle at bottom left, rgba(251, 208, 216, 0.45), transparent 40%),
+    var(--white);
+}
+
+.profile-account-card h2 {
+  margin: 0.4rem 0 0.8rem;
+}
+
+.profile-account-card p {
+  color: var(--text-light);
+  line-height: 1.75;
+}
+
+.profile-account-card .quick-actions {
+  margin-top: 1.3rem;
+}
+
+/* ================================
+   MOBILE OVERFLOW FIX
+================================ */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+main,
+section {
+  max-width: 100%;
+}
+
+/* Make large hero panels behave properly on smaller screens */
+.dashboard-experience,
+.dashboard-hero,
+.profile-hero,
+.simulation-hero,
+.studio-hero,
+.auth-hero,
+.tracks-hero,
+.track-detail-hero {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Prevent grid sections from forcing the page wider */
+.dashboard-story-grid,
+.money-flow-section,
+.breakdown-section,
+.profile-layout,
+.profile-stats-grid,
+.simulation-guidance-panel,
+.simulation-help-layout,
+.studio-detail-layout,
+.studio-profile-panel,
+.track-detail-layout,
+.tracks-layout {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Buttons and rows should wrap instead of pushing page width */
+.hero-action-row,
+.profile-hero-actions,
+.quick-actions,
+.studio-signal-row,
+.snapshot-ribbon,
+.personality-tags {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* Fix mobile hero spacing */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .dashboard-hero,
+  .profile-hero,
+  .simulation-hero,
+  .studio-hero,
+  .auth-hero,
+  .tracks-hero,
+  .track-detail-hero {
+    padding: 2rem;
+    border-radius: 28px;
+  }
+
+  .dashboard-hero h1,
+  .profile-hero h1,
+  .simulation-hero h1,
+  .studio-hero h1,
+  .auth-hero h1,
+  .tracks-hero h1,
+  .track-detail-hero h1 {
+    font-size: 2.4rem;
+    line-height: 1;
+    word-break: normal;
+  }
+}

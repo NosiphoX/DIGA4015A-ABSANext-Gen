@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
 import { formatCurrency } from "../utils/formatters";
 import useUser from "../context/useUser";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 function StudioRentVsBuy() {
+  const studioRef = useRef(null);
   const { user } = useUser();
 
   const [inputs, setInputs] = useState({
-    monthlyIncome: user.monthlyIncome + user.sideIncome,
+    monthlyIncome: Number(user.monthlyIncome || 0) + Number(user.sideIncome || 0),
     propertyPrice: 1800000,
-    monthlyRent: user.rent,
+    monthlyRent: Number(user.rent || 0),
     depositPercent: 10,
     bondInterestRate: 11.5,
     investmentReturnRate: 8,
@@ -19,54 +26,112 @@ function StudioRentVsBuy() {
     years: 5,
   });
 
+  useGSAP(
+    () => {
+      gsap.from(".studio-reveal", {
+        opacity: 0,
+        y: 30,
+        duration: 0.75,
+        stagger: 0.08,
+        ease: "power3.out",
+      });
+
+      gsap.utils.toArray(".studio-focus-section").forEach((section) => {
+        gsap.fromTo(
+          section,
+          {
+            opacity: 0.5,
+            y: 34,
+            filter: "blur(4px)",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 86%",
+              end: "top 45%",
+              scrub: true,
+            },
+          }
+        );
+
+        gsap.to(section, {
+          opacity: 0.4,
+          y: -18,
+          filter: "blur(2px)",
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom 35%",
+            end: "bottom 10%",
+            scrub: true,
+          },
+        });
+      });
+    },
+    { scope: studioRef }
+  );
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setInputs((prev) => ({
-      ...prev,
+    setInputs((prevInputs) => ({
+      ...prevInputs,
       [name]: Number(value),
     }));
   };
 
   const depositAmount = inputs.propertyPrice * (inputs.depositPercent / 100);
-  const loanAmount = inputs.propertyPrice - depositAmount;
+  const loanAmount = Math.max(inputs.propertyPrice - depositAmount, 0);
+  const months = Math.max(inputs.years * 12, 1);
+
+  const monthlyBondRate = inputs.bondInterestRate / 100 / 12;
 
   const monthlyBond =
-    (loanAmount * (inputs.bondInterestRate / 100)) / 12;
+    loanAmount <= 0
+      ? 0
+      : monthlyBondRate === 0
+      ? loanAmount / months
+      : loanAmount *
+        (monthlyBondRate * Math.pow(1 + monthlyBondRate, months)) /
+        (Math.pow(1 + monthlyBondRate, months) - 1);
 
-  const totalRentPaid = inputs.monthlyRent * 12 * inputs.years;
-  const totalBondPaid = monthlyBond * 12 * inputs.years;
+  const totalRentPaid = inputs.monthlyRent * months;
+  const totalBondPaid = monthlyBond * months;
 
-  const bondPercentOfIncome = Math.round(
-    (monthlyBond / inputs.monthlyIncome) * 100
-  );
+  const bondPercentOfIncome =
+    inputs.monthlyIncome > 0
+      ? Math.round((monthlyBond / inputs.monthlyIncome) * 100)
+      : 0;
 
-  const rentPercentOfIncome = Math.round(
-    (inputs.monthlyRent / inputs.monthlyIncome) * 100
-  );
+  const rentPercentOfIncome =
+    inputs.monthlyIncome > 0
+      ? Math.round((inputs.monthlyRent / inputs.monthlyIncome) * 100)
+      : 0;
 
   const investableDifference = Math.max(monthlyBond - inputs.monthlyRent, 0);
+  const monthlyInvestmentReturn = inputs.investmentReturnRate / 100 / 12;
 
   const futureInvestmentValue =
-    investableDifference *
-    12 *
-    inputs.years *
-    (1 + inputs.investmentReturnRate / 100);
+    monthlyInvestmentReturn === 0
+      ? investableDifference * months
+      : investableDifference *
+        ((Math.pow(1 + monthlyInvestmentReturn, months) - 1) /
+          monthlyInvestmentReturn);
 
   const futurePropertyValue =
     inputs.propertyPrice *
     Math.pow(1 + inputs.yearlyPropertyGrowth / 100, inputs.years);
 
   const estimatedBuyingOutcome = futurePropertyValue - loanAmount;
-
   const betterOption =
     futureInvestmentValue > estimatedBuyingOutcome
       ? "Renting + Investing"
       : "Buying";
 
-  const difference = Math.abs(
-    futureInvestmentValue - estimatedBuyingOutcome
-  );
+  const difference = Math.abs(futureInvestmentValue - estimatedBuyingOutcome);
 
   const verdictMessage =
     betterOption === "Renting + Investing"
@@ -100,36 +165,74 @@ function StudioRentVsBuy() {
       : "Balanced Lifestyle & Investing";
 
   return (
-    <div>
-      <section className="page-header">
-        <p className="hero-label">Simulation Studio</p>
-        <h1>Rent vs Buy in Johannesburg</h1>
-        <p>
-          These starting values were pulled from your Money Snapshot so this
-          scenario begins closer to your real financial situation.
-        </p>
+    <main className="studio-detail-experience" ref={studioRef}>
+      <section className="studio-hero studio-reveal studio-focus-section">
+        <div>
+          <p className="section-kicker">Property Simulation</p>
+          <h1>Rent vs Buy in Johannesburg</h1>
+          <p>
+            Compare the cost of renting and investing against buying a property.
+            This studio uses your Money Snapshot as a starting point, then lets
+            you test different property, rent, bond, and growth assumptions.
+          </p>
+
+          <div className="hero-action-row">
+            <Link to="/simulation" className="secondary-btn secondary-dark">
+              Back to Simulation Lab
+            </Link>
+
+            <Link to="/tracks" className="primary-btn">
+              View Strategy Tracks
+            </Link>
+          </div>
+        </div>
+
+        <div className="simulation-orb">
+          <span>Better Path</span>
+          <strong>{betterOption}</strong>
+          <small>{formatCurrency(difference)} difference</small>
+        </div>
       </section>
 
-      <div className="context-banner">
+      <section className="studio-profile-panel studio-reveal studio-focus-section">
         <div>
-          <h4>Connected to your profile</h4>
+          <p className="section-kicker">Connected to your profile</p>
+          <h2>Your starting values are personalised.</h2>
           <p>
             Your current rent and income from the dashboard have already been
-            used here as the starting point.
+            used as the starting point. You can still adjust every assumption to
+            test different scenarios.
           </p>
         </div>
-      </div>
 
-      <div className="studio-detail-layout">
+        <div className="simulation-mini-stats">
+          <div>
+            <span>Starting Income</span>
+            <strong>{formatCurrency(inputs.monthlyIncome)}</strong>
+          </div>
+
+          <div>
+            <span>Current Rent</span>
+            <strong>{formatCurrency(inputs.monthlyRent)}</strong>
+          </div>
+
+          <div>
+            <span>Deposit</span>
+            <strong>{formatCurrency(depositAmount)}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="studio-detail-layout studio-focus-section">
         <div className="studio-inputs">
-          <Card>
+          <Card className="studio-reveal studio-control-card">
             <div className="card-title-row">
-              <h3>Scenario Inputs</h3>
-              <Tooltip text="Adjust these assumptions to test how the outcome changes." />
+              <h3>Scenario Controls</h3>
+              <Tooltip text="Adjust these assumptions to test how the rent vs buy outcome changes." />
             </div>
 
-            <div className="input-grid">
-              <div className="input-group">
+            <div className="studio-control-grid">
+              <div className="input-group floating-field">
                 <label>Monthly Income</label>
                 <input
                   type="number"
@@ -139,7 +242,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Property Price</label>
                 <input
                   type="number"
@@ -149,7 +252,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Monthly Rent</label>
                 <input
                   type="number"
@@ -159,7 +262,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Deposit %</label>
                 <input
                   type="number"
@@ -169,7 +272,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Bond Interest Rate %</label>
                 <input
                   type="number"
@@ -180,7 +283,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Investment Return %</label>
                 <input
                   type="number"
@@ -191,7 +294,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Property Growth %</label>
                 <input
                   type="number"
@@ -202,7 +305,7 @@ function StudioRentVsBuy() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="input-group floating-field">
                 <label>Years</label>
                 <input
                   type="number"
@@ -216,7 +319,7 @@ function StudioRentVsBuy() {
             </div>
           </Card>
 
-          <Card>
+          <Card className="studio-reveal">
             <h3>Educational Notes</h3>
 
             <div className="education-stack">
@@ -248,8 +351,18 @@ function StudioRentVsBuy() {
           </Card>
         </div>
 
-        <div className="studio-results">
-          <Card>
+        <aside className="studio-results">
+          <Card className="studio-reveal verdict-card">
+            <p className="section-kicker">Studio Verdict</p>
+            <h2>{verdictMessage}</h2>
+          </Card>
+
+          <Card className={`studio-reveal affordability-card ${affordabilityType}`}>
+            <h3>Affordability Check</h3>
+            <p className="insight-text">{affordabilityMessage}</p>
+          </Card>
+
+          <Card className="studio-reveal">
             <div className="card-title-row">
               <h3>Scenario Summary</h3>
               <Tooltip text="These figures are calculated from your current assumptions." />
@@ -296,18 +409,7 @@ function StudioRentVsBuy() {
             </div>
           </Card>
 
-          <Card className={`affordability-card ${affordabilityType}`}>
-            <h3>Affordability Check</h3>
-            <p className="insight-text">{affordabilityMessage}</p>
-          </Card>
-
-          <Card>
-            <h3>Studio Verdict</h3>
-            <p className="verdict-badge">{betterOption}</p>
-            <p className="insight-text">{verdictMessage}</p>
-          </Card>
-
-          <Card>
+          <Card className="studio-reveal">
             <h3>Recommended Next Step</h3>
             <p className="recommendation-title">{recommendedTrack}</p>
 
@@ -341,23 +443,17 @@ function StudioRentVsBuy() {
             </div>
           </Card>
 
-          <Card>
+          <Card className="studio-reveal">
             <h3>What This Means</h3>
             <p>
               This result is not a guarantee. It is a planning tool that helps
               you understand the trade-off between flexibility, ownership, and
               long-term growth based on your current assumptions.
             </p>
-            <p>
-              If renting is much cheaper than buying, investing the difference
-              may strengthen your position. If you can comfortably manage the
-              bond and property growth is steady, buying may become more
-              attractive.
-            </p>
           </Card>
-        </div>
-      </div>
-    </div>
+        </aside>
+      </section>
+    </main>
   );
 }
 

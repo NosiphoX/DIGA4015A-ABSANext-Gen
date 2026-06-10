@@ -15,133 +15,151 @@ import Tracks from "./pages/Tracks";
 import TrackDetail from "./pages/TrackDetail";
 import Simulation from "./pages/Simulation";
 import StudioRentVsBuy from "./pages/StudioRentVsBuy";
+import CarFinanceVsInvest from "./pages/CarFinanceVsInvest";
+import LocalVsOffshore from "./pages/LocalVsOffshore";
 import Profile from "./pages/Profile";
 import Onboarding from "./pages/Onboarding";
 import Login from "./pages/Login";
 
 import useUser from "./context/useUser";
 
-function AppRoutes() {
-  const { user } = useUser();
+function ProtectedRoute({ children }) {
+  const { user, isAuthenticated } = useUser();
 
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!user.onboardingComplete) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return children;
+}
+
+function OnboardingRoute() {
+  const { user, isAuthenticated } = useUser();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.onboardingComplete) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Onboarding />;
+}
+
+function RootRoute() {
+  const { user, isAuthenticated } = useUser();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!user.onboardingComplete) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return <Navigate to="/dashboard" replace />;
+}
+
+function AppRoutes() {
   return (
     <>
       <Navbar />
 
       <div className="container">
         <Routes>
-          <Route
-            path="/"
-            element={
-              user.onboardingComplete ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
-            }
-          />
+          <Route path="/" element={<RootRoute />} />
 
-          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
+
+          <Route path="/onboarding" element={<OnboardingRoute />} />
 
           <Route
             path="/home"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <Home />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/dashboard"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <Dashboard />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/tracks"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <Tracks />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
           <Route
-            path="/tracks/first-property"
+            path="/tracks/:trackSlug"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <TrackDetail />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
-            }
-          />
-
-          <Route
-            path="/tracks/balanced-lifestyle"
-            element={
-              user.onboardingComplete ? (
-                <TrackDetail />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
-            }
-          />
-
-          <Route
-            path="/tracks/financial-reset"
-            element={
-              user.onboardingComplete ? (
-                <TrackDetail />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/simulation"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <Simulation />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/simulation/rent-vs-buy"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <StudioRentVsBuy />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulation/car-finance-vs-invest"
+            element={
+              <ProtectedRoute>
+                <CarFinanceVsInvest />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulation/local-vs-offshore"
+            element={
+              <ProtectedRoute>
+                <LocalVsOffshore />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/profile"
             element={
-              user.onboardingComplete ? (
+              <ProtectedRoute>
                 <Profile />
-              ) : (
-                <Navigate to="/onboarding" replace />
-              )
+              </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
 

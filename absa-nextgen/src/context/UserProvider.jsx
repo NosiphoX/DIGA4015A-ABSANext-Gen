@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import UserContext from "./UserContext";
+import {
+  getActiveAccount,
+  getActiveSessionEmail,
+  updateAccount,
+  logoutAccount,
+} from "../utils/authService";
 
 const defaultUser = {
-  name: "Lerato",
+  name: "",
   email: "",
   monthlyIncome: 38000,
   sideIncome: 2000,
@@ -22,27 +28,86 @@ const defaultUser = {
 };
 
 function UserProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("absa_nextgen_user");
+  const [user, setUserState] = useState(() => {
+    const activeAccount = getActiveAccount();
 
-    if (savedUser) {
-      return JSON.parse(savedUser);
+    if (activeAccount) {
+      return {
+        ...defaultUser,
+        ...activeAccount,
+      };
     }
 
     return defaultUser;
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(getActiveSessionEmail());
+  });
+
   useEffect(() => {
-    localStorage.setItem("absa_nextgen_user", JSON.stringify(user));
+    const activeEmail = getActiveSessionEmail();
+
+    if (activeEmail && user.email) {
+      updateAccount(activeEmail, user);
+    }
   }, [user]);
 
+  const setUser = (updatedUser) => {
+    setUserState((prevUser) => {
+      if (typeof updatedUser === "function") {
+        return updatedUser(prevUser);
+      }
+
+      return {
+        ...prevUser,
+        ...updatedUser,
+      };
+    });
+  };
+
+  const loadUserFromAccount = (account) => {
+    setUserState({
+      ...defaultUser,
+      ...account,
+    });
+
+    setIsAuthenticated(true);
+  };
+
+  const logoutUser = () => {
+    logoutAccount();
+    setUserState(defaultUser);
+    setIsAuthenticated(false);
+  };
+
   const resetUser = () => {
-    localStorage.removeItem("absa_nextgen_user");
-    setUser(defaultUser);
+    const resetProfile = {
+      ...defaultUser,
+      name: user.name,
+      email: user.email,
+      onboardingComplete: false,
+    };
+
+    setUserState(resetProfile);
+
+    if (user.email) {
+      updateAccount(user.email, resetProfile);
+    }
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, resetUser }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        resetUser,
+        isAuthenticated,
+        setIsAuthenticated,
+        loadUserFromAccount,
+        logoutUser,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

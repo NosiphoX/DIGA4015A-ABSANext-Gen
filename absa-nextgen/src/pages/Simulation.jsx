@@ -1,8 +1,22 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
+import useUser from "../context/useUser";
+import { getFinancialAdvice } from "../utils/financialAdvice";
+import { formatCurrency } from "../utils/formatters";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function Simulation() {
+  const simulationRef = useRef(null);
+  const { user } = useUser();
+  const advice = getFinancialAdvice(user);
+
   const studios = [
     {
       title: "Rent vs Buy in Johannesburg",
@@ -11,133 +25,235 @@ function Simulation() {
       route: "/simulation/rent-vs-buy",
       status: "Featured",
       audience: "Best for users planning their first property journey",
+      theme: "Property",
+      signal: "Live Studio",
     },
     {
       title: "Car Finance vs Invest",
       description:
-        "Explore the long-term trade-off between financing a car and investing the difference instead.",
-      route: "#",
-      status: "Coming Soon",
+        "Compare the long-term cost of financing a car against buying cheaper and investing the monthly difference.",
+      route: "/simulation/car-finance-vs-invest",
+      status: "Live Studio",
       audience: "Best for users comparing lifestyle spending vs wealth building",
+      theme: "Lifestyle",
+      signal: "Live Studio",
     },
     {
       title: "Local vs Offshore Investing",
       description:
-        "Understand how local and offshore investing may affect your future portfolio growth.",
-      route: "#",
-      status: "Coming Soon",
+        "Compare how local and offshore investing could grow over time using different return and exchange-rate assumptions.",
+      route: "/simulation/local-vs-offshore",
+      status: "Live Studio",
       audience: "Best for users exploring long-term investing strategy",
+      theme: "Investing",
+      signal: "Live Studio",
     },
   ];
 
+  useGSAP(
+    () => {
+      gsap.from(".simulation-reveal", {
+        opacity: 0,
+        y: 28,
+        duration: 0.75,
+        stagger: 0.08,
+        ease: "power3.out",
+      });
+
+      gsap.utils.toArray(".simulation-focus-section").forEach((section) => {
+        gsap.fromTo(
+          section,
+          {
+            opacity: 0.5,
+            y: 34,
+            filter: "blur(4px)",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 86%",
+              end: "top 45%",
+              scrub: true,
+            },
+          }
+        );
+
+        gsap.to(section, {
+          opacity: 0.4,
+          y: -18,
+          filter: "blur(2px)",
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom 35%",
+            end: "bottom 10%",
+            scrub: true,
+          },
+        });
+      });
+    },
+    { scope: simulationRef }
+  );
+
   return (
-    <div>
-      <section className="page-header">
-        <p className="hero-label">Simulation Lab</p>
-        <h1>Explore the “What If?” of Your Financial Decisions</h1>
-        <p>
-          The Simulation Lab helps you test real South African money decisions
-          before committing to them. Adjust the inputs, compare the outcomes,
-          and understand the trade-offs more clearly.
-        </p>
+    <main className="simulation-experience" ref={simulationRef}>
+      <section className="simulation-hero simulation-reveal simulation-focus-section">
+        <div>
+          <p className="section-kicker">Simulation Lab</p>
+          <h1>Test the future before you commit to it.</h1>
+          <p>
+            Explore the “what if?” behind major South African financial
+            decisions. Use your current money profile to compare trade-offs,
+            pressure points, and long-term outcomes.
+          </p>
+
+          <div className="hero-action-row">
+            <Link to="/simulation/rent-vs-buy" className="primary-btn">
+              Open Featured Studio
+            </Link>
+
+            <Link to="/dashboard" className="secondary-btn secondary-dark">
+              Update My Snapshot
+            </Link>
+          </div>
+        </div>
+
+        <div className="simulation-orb">
+          <span>Current Capacity</span>
+          <strong>{formatCurrency(advice.monthlyLeftover)}</strong>
+          <small>{advice.financialHealth} profile</small>
+        </div>
       </section>
 
-      <div className="context-banner">
+      <section className="simulation-guidance-panel simulation-reveal simulation-focus-section">
         <div>
-          <h4>Why this matters</h4>
+          <p className="section-kicker">Why this matters</p>
+          <h2>Big money decisions are not just about affordability.</h2>
           <p>
-            Big decisions like renting, buying property, financing a car, or
-            investing offshore can affect your next 3 to 5 years. These studios
-            help you see what your choice may cost or unlock over time.
+            A choice can look affordable today but still create pressure later.
+            The Simulation Lab helps you compare ownership, flexibility, debt,
+            investing, and lifestyle trade-offs before you commit.
           </p>
         </div>
-      </div>
 
-      <div className="featured-banner">
+        <div className="simulation-mini-stats">
+          <div>
+            <span>Money Left</span>
+            <strong>{formatCurrency(advice.monthlyLeftover)}</strong>
+          </div>
+
+          <div>
+            <span>Savings Rate</span>
+            <strong>{advice.savingsRate}%</strong>
+          </div>
+
+          <div>
+            <span>Debt Pressure</span>
+            <strong>{advice.debtToIncomeRatio}%</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="featured-studio-panel simulation-reveal simulation-focus-section">
         <div>
-          <h3>Start with the Featured Studio</h3>
+          <p className="section-kicker">Featured Studio</p>
+          <h2>Rent vs Buy in Johannesburg</h2>
           <p>
-            If property is one of your biggest goals, begin with{" "}
-            <strong>Rent vs Buy in Johannesburg</strong> to see whether owning
-            or renting may better support your wealth-building path.
+            If property is one of your biggest goals, start here. This studio
+            compares the cost of renting and investing against the long-term
+            pressure and potential benefit of buying.
           </p>
         </div>
 
         <Link to="/simulation/rent-vs-buy" className="primary-btn">
-          Open Studio
+          Launch Studio
         </Link>
-      </div>
+      </section>
 
-      <div className="simulation-layout">
-        <div className="simulation-main">
-          <div className="studio-grid">
-            {studios.map((studio) => (
-              <Card key={studio.title}>
-                <div className="studio-card-top">
-                  <span className="track-badge">{studio.status}</span>
-                </div>
+      <section className="simulation-studio-path simulation-focus-section">
+        {studios.map((studio, index) => (
+          <Card
+            key={studio.title}
+            className={`simulation-studio-card simulation-reveal ${
+              studio.status === "Featured" ? "featured-studio-card" : ""
+            }`}
+          >
+            <div className="studio-number">
+              {String(index + 1).padStart(2, "0")}
+            </div>
 
-                <h3>{studio.title}</h3>
-                <p>{studio.description}</p>
+            <div className="studio-card-content">
+              <div className="studio-card-top">
+                <span className="track-badge">{studio.status}</span>
+                <span className="studio-theme">{studio.theme}</span>
+              </div>
 
-                <div className="studio-audience">
-                  <strong>Who it is for:</strong> {studio.audience}
-                </div>
+              <h2>{studio.title}</h2>
+              <p>{studio.description}</p>
 
-                {studio.route === "#" ? (
-                  <button className="secondary-btn track-btn disabled-btn" disabled>
-                    Coming Soon
-                  </button>
-                ) : (
-                  <Link to={studio.route} className="primary-btn track-btn">
-                    Open Studio
-                  </Link>
-                )}
-              </Card>
-            ))}
+              <div className="studio-audience">
+                <strong>Who it is for:</strong> {studio.audience}
+              </div>
+
+              <div className="studio-signal-row">
+                <span>{studio.signal}</span>
+
+                <Link to={studio.route} className="primary-btn track-btn">
+                  Open Studio
+                </Link>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </section>
+
+      <section className="simulation-help-layout simulation-focus-section">
+        <Card className="simulation-reveal">
+          <div className="card-title-row">
+            <h3>How to Use the Simulation Lab</h3>
+            <Tooltip text="Use the lab to compare trade-offs, not to predict the future perfectly." />
           </div>
-        </div>
 
-        <aside className="simulation-sidebar">
-          <Card>
-            <div className="card-title-row">
-              <h3>How to Use the Simulation Lab</h3>
-              <Tooltip text="Use the lab to compare trade-offs, not to predict the future perfectly." />
-            </div>
+          <ul className="info-list">
+            <li>Adjust one variable at a time so the trade-offs stay clear.</li>
+            <li>
+              Focus on the long-term outcome, not only monthly affordability.
+            </li>
+            <li>Read the verdict and the explainer together.</li>
+            <li>Use the result to guide your Strategy Track decisions.</li>
+          </ul>
+        </Card>
 
-            <ul className="info-list">
-              <li>Adjust one variable at a time so the trade-offs stay clear.</li>
-              <li>Focus on the long-term outcome, not only monthly affordability.</li>
-              <li>Read the verdict and the explainer together.</li>
-              <li>Use the result to guide your Strategy Track decisions.</li>
-            </ul>
-          </Card>
+        <Card className="simulation-reveal">
+          <h3>South African Context</h3>
+          <p>
+            The studios are framed around South African realities such as bond
+            rates, Johannesburg rent levels, deposits, medical aid costs, and
+            the trade-off between lifestyle and wealth building.
+          </p>
+        </Card>
 
-          <Card>
-            <h3>South African Context</h3>
-            <p>
-              The studios are framed around South African realities such as bond
-              rates, Johannesburg rent levels, deposits, SARS pressure,
-              medical aid costs, and the trade-off between lifestyle and wealth
-              building.
-            </p>
-          </Card>
+        <Card className="simulation-reveal">
+          <h3>Where to go next</h3>
 
-          <Card>
-            <h3>Where to go next</h3>
-            <div className="quick-actions">
-              <Link to="/dashboard" className="secondary-btn dashboard-btn secondary-dark">
-                Back to Money Snapshot
-              </Link>
+          <div className="quick-actions">
+            <Link
+              to="/dashboard"
+              className="secondary-btn dashboard-btn secondary-dark"
+            >
+              Back to Money Snapshot
+            </Link>
 
-              <Link to="/tracks" className="primary-btn dashboard-btn">
-                View Strategy Tracks
-              </Link>
-            </div>
-          </Card>
-        </aside>
-      </div>
-    </div>
+            <Link to="/tracks" className="primary-btn dashboard-btn">
+              View Strategy Tracks
+            </Link>
+          </div>
+        </Card>
+      </section>
+    </main>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -12,7 +12,9 @@ gsap.registerPlugin(useGSAP);
 
 function Profile() {
   const profileRef = useRef(null);
-  const { user, resetUser } = useUser();
+  const navigate = useNavigate();
+
+  const { user, resetUser, logoutUser } = useUser();
 
   const advice = getFinancialAdvice(user);
 
@@ -36,15 +38,23 @@ function Profile() {
     { scope: profileRef }
   );
 
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/login");
+  };
+
+  const displayName = user.name || "NextGen User";
+  const displayEmail = user.email || "No email saved";
+
   return (
     <main className="profile-page" ref={profileRef}>
       <section className="profile-hero profile-animate">
         <div>
           <p className="hero-label">Your Financial Identity</p>
-          <h1>{user.name}'s Wealth Studio</h1>
+          <h1>{displayName}'s Wealth Studio</h1>
           <p>
             A personalised overview of your money profile, financial behaviour,
-            current strategy direction, and next best move.
+            current strategy direction, account access, and next best move.
           </p>
 
           <div className="profile-hero-actions">
@@ -91,7 +101,9 @@ function Profile() {
 
       <section className="profile-layout">
         <div className="profile-main-column">
-          <Card className={`profile-identity-card ${advice.insightState} profile-animate`}>
+          <Card
+            className={`profile-identity-card ${advice.insightState} profile-animate`}
+          >
             <p className="section-kicker">Current Reading</p>
             <h2>{advice.insightTitle}</h2>
             <p>{advice.insightMessage}</p>
@@ -107,14 +119,56 @@ function Profile() {
             <h2>{user.financialPersonality || "Balanced Builder"}</h2>
             <p>
               This identity is based on your onboarding answers and current
-              financial position. It gives the product a more personal tone,
-              but it can change as your profile changes.
+              financial position. It gives the product a more personal tone, but
+              it can change as your profile changes.
             </p>
 
             <div className="personality-tags">
               <span>{user.goal || "Goal not selected"}</span>
               <span>{user.riskStyle || "Risk style not selected"}</span>
               <span>{advice.recommendedTrack}</span>
+            </div>
+          </Card>
+
+          <Card className="profile-account-card profile-animate">
+            <p className="section-kicker">Account Access</p>
+            <h2>Session & Security</h2>
+            <p>
+              Manage your current app session. Logging out keeps your saved
+              account and profile data, but ends access until you log in again.
+            </p>
+
+            <div className="breakdown-row">
+              <span>Logged in as</span>
+              <strong>{displayEmail}</strong>
+            </div>
+
+            <div className="breakdown-row">
+              <span>Session status</span>
+              <strong>Active</strong>
+            </div>
+
+            <div className="breakdown-row">
+              <span>Account type</span>
+              <strong>Local prototype account</strong>
+            </div>
+
+            <div className="quick-actions">
+              <button
+                type="button"
+                className="secondary-btn dashboard-btn secondary-dark"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+
+              <button
+                type="button"
+                className="reset-profile-btn danger-reset"
+                onClick={resetUser}
+              >
+                Reset Profile
+              </button>
             </div>
           </Card>
         </div>
@@ -135,12 +189,12 @@ function Profile() {
 
             <div className="breakdown-row">
               <span>Name</span>
-              <strong>{user.name}</strong>
+              <strong>{displayName}</strong>
             </div>
 
             <div className="breakdown-row">
               <span>Email</span>
-              <strong>{user.email || "Not added"}</strong>
+              <strong>{displayEmail}</strong>
             </div>
 
             <div className="breakdown-row">
@@ -152,17 +206,21 @@ function Profile() {
               <span>Risk Style</span>
               <strong>{user.riskStyle || "Not selected"}</strong>
             </div>
+
+            <div className="breakdown-row">
+              <span>Personality</span>
+              <strong>{user.financialPersonality || "Not selected"}</strong>
+            </div>
           </Card>
 
           <Card className="profile-animate">
-            <p className="section-kicker">Account</p>
+            <p className="section-kicker">Prototype Privacy</p>
+            <h3>Local storage notice</h3>
             <p>
-              
+              This prototype saves account and profile information locally on
+              this device. A real financial product would use secure
+              authentication, encrypted storage, and a protected backend.
             </p>
-
-            <button className="reset-profile-btn danger-reset" onClick={resetUser}>
-              Reset saved profile
-            </button>
           </Card>
         </aside>
       </section>

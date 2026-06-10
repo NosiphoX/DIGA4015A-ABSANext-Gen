@@ -1,84 +1,192 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
 import Card from "../components/Card";
+import useUser from "../context/useUser";
+import { getFinancialAdvice } from "../utils/financialAdvice";
+import { formatCurrency } from "../utils/formatters";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const tracks = [
+  {
+    title: "First Property Path",
+    slug: "first-property",
+    duration: "5 years",
+    mood: "Ownership",
+    description:
+      "For users who want to prepare for a first home through deposit planning, affordability awareness, and realistic property trade-offs.",
+    focus: ["Deposit saving", "Bond readiness", "Transfer costs"],
+  },
+  {
+    title: "Balanced Lifestyle & Investing",
+    slug: "balanced-lifestyle",
+    duration: "5 years",
+    mood: "Momentum",
+    description:
+      "For users who want to enjoy their income while still building consistent savings, investments, and long-term financial habits.",
+    focus: ["Lifestyle balance", "Investing rhythm", "Flexible growth"],
+  },
+  {
+    title: "Financial Reset & Foundation Builder",
+    slug: "financial-reset",
+    duration: "3–5 years",
+    mood: "Stability",
+    description:
+      "For users who need to reduce pressure, manage debt, build an emergency fund, and create financial breathing room first.",
+    focus: ["Debt control", "Emergency fund", "Budget stability"],
+  },
+];
 
 function Tracks() {
-  const tracks = [
-    {
-      title: "First Property Path",
-      description:
-        "Plan for your first property by building an emergency fund, saving for a deposit, and understanding future bond costs.",
-      duration: "5 Year Track",
-      progress: "In Progress",
-      route: "/tracks/first-property",
+  const tracksRef = useRef(null);
+  const { user } = useUser();
+  const advice = getFinancialAdvice(user);
+
+  useGSAP(
+    () => {
+      gsap.from(".tracks-reveal", {
+        opacity: 0,
+        y: 28,
+        duration: 0.75,
+        stagger: 0.08,
+        ease: "power3.out",
+      });
+
+      gsap.utils.toArray(".track-focus-section").forEach((section) => {
+        gsap.fromTo(
+          section,
+          {
+            opacity: 0.5,
+            y: 34,
+            filter: "blur(4px)",
+          },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 86%",
+              end: "top 45%",
+              scrub: true,
+            },
+          }
+        );
+
+        gsap.to(section, {
+          opacity: 0.4,
+          y: -18,
+          filter: "blur(2px)",
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom 35%",
+            end: "bottom 10%",
+            scrub: true,
+          },
+        });
+      });
     },
-    {
-      title: "Balanced Lifestyle & Investing",
-      description:
-        "Balance enjoying your lifestyle today while still building wealth through investing and long-term planning.",
-      duration: "5 Year Track",
-      progress: "Not Started",
-      route: "/tracks/balanced-lifestyle",
-    },
-    {
-      title: "Financial Reset & Foundation Builder",
-      description:
-        "Focus on reducing debt, building an emergency fund, and creating financial stability before investing aggressively.",
-      duration: "3 Year Track",
-      progress: "Recommended",
-      route: "/tracks/financial-reset",
-    },
-  ];
+    { scope: tracksRef }
+  );
 
   return (
-    <div>
-      <section className="page-header">
-        <p className="hero-label">Strategy Tracks</p>
-        <h1>Choose a Financial Path That Matches Your Goals</h1>
-        <p>
-          Strategy Tracks help you follow a structured financial journey over
-          the next few years. Each path is designed for a different stage of
-          life and financial readiness.
-        </p>
-      </section>
-
-      <section className="tracks-overview-grid">
-        <Card>
-          <h3>Why Strategy Tracks Matter</h3>
+    <main className="tracks-experience" ref={tracksRef}>
+      <section className="tracks-hero tracks-reveal track-focus-section">
+        <div>
+          <p className="section-kicker">Strategy Tracks</p>
+          <h1>Your money needs a path, not just a dashboard.</h1>
           <p>
-            Many young professionals try to do everything at once: pay debt,
-            save for property, invest, travel, and support family. Strategy
-            Tracks help you prioritise the right goals at the right time.
+            Choose a guided track that turns your current financial position into
+            a practical five-year direction.
           </p>
-        </Card>
 
-        <Card>
-          <h3>South African Context</h3>
-          <p>
-            These tracks include realistic South African financial ideas such as
-            emergency funds, retirement annuities, medical aid, SARS tax, and
-            property deposits.
-          </p>
-        </Card>
-      </section>
-
-      <section className="tracks-grid">
-        {tracks.map((track) => (
-          <Card key={track.title}>
-            <div className="track-card-top">
-              <span className="track-badge">{track.progress}</span>
-              <span className="track-duration">{track.duration}</span>
-            </div>
-
-            <h3>{track.title}</h3>
-            <p>{track.description}</p>
-
-            <Link to={track.route} className="primary-btn track-btn">
-              View Track
+          <div className="hero-action-row">
+            <Link to={`/tracks/${tracks.find((track) => track.title === advice.recommendedTrack)?.slug || "financial-reset"}`} className="primary-btn">
+              Open Recommended Track
             </Link>
-          </Card>
-        ))}
+
+            <Link to="/dashboard" className="secondary-btn secondary-dark">
+              Update Money Snapshot
+            </Link>
+          </div>
+        </div>
+
+        <div className="track-orb">
+          <span>Recommended</span>
+          <strong>{advice.recommendedTrack}</strong>
+          <small>{advice.financialHealth} profile</small>
+        </div>
       </section>
-    </div>
+
+      <section className="tracks-guidance-panel tracks-reveal track-focus-section">
+        <div>
+          <p className="section-kicker">Why this track?</p>
+          <h2>{advice.recommendedTrack}</h2>
+          <p>{advice.recommendedTrackMessage}</p>
+        </div>
+
+        <div className="tracks-mini-stats">
+          <div>
+            <span>Money Left</span>
+            <strong>{formatCurrency(advice.monthlyLeftover)}</strong>
+          </div>
+
+          <div>
+            <span>Debt Pressure</span>
+            <strong>{advice.debtToIncomeRatio}%</strong>
+          </div>
+
+          <div>
+            <span>Savings Rate</span>
+            <strong>{advice.savingsRate}%</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="tracks-pathway track-focus-section">
+        {tracks.map((track, index) => {
+          const isRecommended = track.title === advice.recommendedTrack;
+
+          return (
+            <Card
+              key={track.slug}
+              className={`track-path-card tracks-reveal ${
+                isRecommended ? "recommended-path" : ""
+              }`}
+            >
+              <div className="track-path-number">
+                {String(index + 1).padStart(2, "0")}
+              </div>
+
+              <div className="track-path-content">
+                <div className="track-card-top">
+                  <span className="track-badge">{track.mood}</span>
+                  <span className="track-duration">{track.duration}</span>
+                </div>
+
+                <h2>{track.title}</h2>
+                <p>{track.description}</p>
+
+                <div className="track-focus-tags">
+                  {track.focus.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </div>
+
+                <Link to={`/tracks/${track.slug}`} className="primary-btn track-btn">
+                  Explore Track
+                </Link>
+              </div>
+            </Card>
+          );
+        })}
+      </section>
+    </main>
   );
 }
 
