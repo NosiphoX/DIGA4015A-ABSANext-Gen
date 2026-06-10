@@ -33,6 +33,56 @@ export function getFinancialAdvice(user) {
     financialHealth = "Moderate";
   }
 
+  let goalTitle = user.goal || "Build an emergency fund";
+  let goalTarget = 0;
+  let goalCurrent = 0;
+  let goalMetricLabel = "";
+  let goalProgress = 0;
+  let goalMessage = "";
+
+  if (goalTitle === "Build an emergency fund") {
+    goalTarget = totalExpenses * 3;
+    goalCurrent = savings;
+    goalMetricLabel = "Saved toward 3 months of expenses";
+    goalMessage =
+      goalTarget > 0
+        ? "Your emergency goal is based on saving roughly three months of your current expenses."
+        : "Add your expenses so the app can estimate your emergency fund target.";
+  } else if (goalTitle === "Buy my first property") {
+    goalTarget = 120000;
+    goalCurrent = savings;
+    goalMetricLabel = "Saved toward an estimated starter deposit";
+    goalMessage =
+      "This uses a starter property deposit estimate. You can refine this later inside the property track.";
+  } else if (goalTitle === "Pay off debt") {
+    goalTarget = debt > 0 ? debt : 1;
+    goalCurrent = debt === 0 ? 1 : 0;
+    goalMetricLabel = debt === 0 ? "Debt cleared" : "Debt still active";
+    goalMessage =
+      debt === 0
+        ? "You currently have no debt recorded, so this goal is complete for now."
+        : "Because the app does not yet track your original starting debt, this goal focuses on whether active debt remains.";
+  } else if (goalTitle === "Start investing consistently") {
+    goalTarget = totalIncome * 0.2;
+    goalCurrent = savings;
+    goalMetricLabel = "Starter investing buffer";
+    goalMessage =
+      "This uses your savings as a starter investing buffer until a dedicated investment field is added.";
+  } else if (goalTitle === "Balance lifestyle and investing") {
+    goalTarget = totalIncome * 0.15;
+    goalCurrent = savings;
+    goalMetricLabel = "Saved toward flexible wealth-building";
+    goalMessage =
+      "This goal looks at whether you have savings room before balancing lifestyle spending with investing.";
+  }
+
+  if (goalTarget > 0) {
+    goalProgress = Math.max(
+      0,
+      Math.min(Math.round((goalCurrent / goalTarget) * 100), 100)
+    );
+  }
+
   let insightState = "";
   let insightTitle = "";
   let insightMessage = "";
@@ -151,5 +201,11 @@ export function getFinancialAdvice(user) {
     insightDetails,
     recommendedTrack,
     recommendedTrackMessage,
+    goalTitle,
+    goalTarget,
+    goalCurrent,
+    goalProgress,
+    goalMetricLabel,
+    goalMessage,
   };
 }
