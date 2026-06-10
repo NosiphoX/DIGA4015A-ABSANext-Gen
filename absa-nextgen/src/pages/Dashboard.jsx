@@ -3,111 +3,30 @@ import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import Tooltip from "../components/Tooltip";
 import { formatCurrency } from "../utils/formatters";
+import { getFinancialAdvice } from "../utils/financialAdvice";
 import useUser from "../context/useUser";
 
 function Dashboard() {
   const [showBanner, setShowBanner] = useState(true);
   const { user, setUser } = useUser();
 
+  const advice = getFinancialAdvice(user);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    const textFields = ["name", "goal", "riskStyle", "financialPersonality"];
+
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: name === "name" || name === "goal" ? value : Number(value),
+      [name]: textFields.includes(name) ? value : Number(value),
     }));
   };
 
-  const totalIncome = user.monthlyIncome + user.sideIncome;
-
-  const totalExpenses =
-    user.rent +
-    user.carPayment +
-    user.insurance +
-    user.medicalAid +
-    user.subscriptions +
-    user.food;
-
-  const monthlyLeftover = totalIncome - totalExpenses;
-
-  const savingsRate =
-    totalIncome > 0 ? Math.round((monthlyLeftover / totalIncome) * 100) : 0;
-
-  const expenseRatio =
-    totalIncome > 0 ? Math.round((totalExpenses / totalIncome) * 100) : 0;
-
-  const financialHealth =
-    savingsRate >= 20
-      ? "Strong"
-      : savingsRate >= 10
-      ? "Moderate"
-      : "Needs Attention";
-
   const goalProgress = Math.max(
     0,
-    Math.min(Math.round((monthlyLeftover / 5000) * 100), 100)
+    Math.min(Math.round((advice.monthlyLeftover / 5000) * 100), 100)
   );
-
-  let insightTitle = "";
-  let insightMessage = "";
-  let insightDetails = "";
-  let insightState = "";
-
-  if (user.debt >= 15000 || savingsRate < 5 || monthlyLeftover <= 0) {
-    insightState = "risk";
-    insightTitle = "You may be under financial pressure";
-    insightMessage =
-      "Your current debt or spending levels may slow down your goals and leave very little room for emergencies.";
-    insightDetails =
-      "Right now, your best move is to stabilise your finances. Focus on reducing expensive debt, avoiding new unnecessary commitments, and creating more breathing room in your monthly budget before pushing toward bigger goals like property or investing.";
-  } else if (
-    (user.debt > 0 && user.debt < 15000) ||
-    (savingsRate >= 5 && savingsRate < 15) ||
-    monthlyLeftover < 8000
-  ) {
-    insightState = "caution";
-    insightTitle = "You are doing okay, but you could drift off track";
-    insightMessage =
-      "Your finances are relatively stable, but your current margin is still tight enough that debt or rising costs could affect your progress.";
-    insightDetails =
-      "This is a good stage to become more intentional. Reducing debt faster, increasing your leftover cash, and building a stronger emergency fund now can prevent future pressure and help you stay aligned with your goals.";
-  } else {
-    insightState = "strong";
-    insightTitle = "You are in a strong position";
-    insightMessage =
-      "Your finances show good stability, and you appear to have healthy room to save or invest toward bigger goals.";
-    insightDetails =
-      "Keep doing what is working. You can now focus on building long-term wealth more confidently through investing, deposit saving, or strengthening your financial protection without putting too much pressure on your monthly cash flow.";
-  }
-
-  let recommendedTrack = "";
-  let recommendedTrackMessage = "";
-
-  if (user.debt >= 15000 || monthlyLeftover <= 0 || savingsRate < 5) {
-    recommendedTrack = "Financial Reset & Foundation Builder";
-    recommendedTrackMessage =
-      "Your current debt or low monthly breathing room suggests that building stability should come first. Focus on reducing debt and creating a stronger financial foundation before taking on bigger commitments.";
-  } else if (
-    user.debt < 15000 &&
-    monthlyLeftover >= 5000 &&
-    monthlyLeftover < 12000
-  ) {
-    recommendedTrack = "Balanced Lifestyle & Investing";
-    recommendedTrackMessage =
-      "You are in a more stable position, but not yet at maximum flexibility. This track helps you balance enjoying your income now while steadily building long-term wealth.";
-  } else if (
-    user.debt === 0 &&
-    monthlyLeftover >= 12000 &&
-    savingsRate >= 20
-  ) {
-    recommendedTrack = "First Property Path";
-    recommendedTrackMessage =
-      "You appear to have enough monthly capacity and stability to begin thinking more seriously about a future property deposit and affordability planning.";
-  } else {
-    recommendedTrack = "Balanced Lifestyle & Investing";
-    recommendedTrackMessage =
-      "Your finances show some positive momentum, and a balanced approach may help you keep growing without putting too much pressure on your lifestyle.";
-  }
 
   return (
     <div>
@@ -115,8 +34,8 @@ function Dashboard() {
         <div className="page-header">
           <h2>Edit Your Financial Details</h2>
           <p>
-            Update your monthly income, expenses, debt, and goals to generate a
-            more personalised financial snapshot.
+            Update your monthly income, expenses, debt, savings, and goals to
+            generate a more personalised financial snapshot.
           </p>
         </div>
 
@@ -222,13 +141,24 @@ function Dashboard() {
           </div>
 
           <div className="input-group">
-            <label>Current Goal</label>
+            <label>Current Savings</label>
             <input
-              type="text"
-              name="goal"
-              value={user.goal}
+              type="number"
+              name="savings"
+              value={user.savings}
               onChange={handleChange}
             />
+          </div>
+
+          <div className="input-group">
+            <label>Current Goal</label>
+            <select name="goal" value={user.goal} onChange={handleChange}>
+              <option>Build an emergency fund</option>
+              <option>Buy my first property</option>
+              <option>Pay off debt</option>
+              <option>Start investing consistently</option>
+              <option>Balance lifestyle and investing</option>
+            </select>
           </div>
         </div>
       </Card>
@@ -264,7 +194,7 @@ function Dashboard() {
             <h3>Total Income</h3>
             <Tooltip text="This includes your salary and any extra monthly income after tax." />
           </div>
-          <h2>{formatCurrency(totalIncome)}</h2>
+          <h2>{formatCurrency(advice.totalIncome)}</h2>
           <p>Monthly after-tax income</p>
         </Card>
 
@@ -273,8 +203,8 @@ function Dashboard() {
             <h3>Monthly Costs</h3>
             <Tooltip text="These are your fixed monthly expenses like rent, transport, food, and insurance." />
           </div>
-          <h2>{formatCurrency(totalExpenses)}</h2>
-          <p>{expenseRatio}% of your income</p>
+          <h2>{formatCurrency(advice.totalExpenses)}</h2>
+          <p>{advice.expenseRatio}% of your income</p>
         </Card>
 
         <Card>
@@ -282,8 +212,8 @@ function Dashboard() {
             <h3>Money Left Over</h3>
             <Tooltip text="This is the amount remaining after all your monthly expenses are paid." />
           </div>
-          <h2>{formatCurrency(monthlyLeftover)}</h2>
-          <p>{savingsRate}% potential savings rate</p>
+          <h2>{formatCurrency(advice.monthlyLeftover)}</h2>
+          <p>{advice.savingsRate}% potential savings rate</p>
         </Card>
 
         <Card>
@@ -291,12 +221,12 @@ function Dashboard() {
             <h3>Financial Health</h3>
             <Tooltip text="This score is based on your savings rate, debt level, and monthly costs." />
           </div>
-          <h2>{financialHealth}</h2>
+          <h2>{advice.financialHealth}</h2>
           <p>
-            {financialHealth === "Strong"
+            {advice.financialHealth === "Strong"
               ? "You are in a healthy position."
-              : financialHealth === "Moderate"
-              ? "You are doing okay but could improve."
+              : advice.financialHealth === "Moderate"
+              ? "You are doing okay, but there is room to improve."
               : "Your finances may need attention."}
           </p>
         </Card>
@@ -339,7 +269,7 @@ function Dashboard() {
 
             <div className="breakdown-row total-row">
               <span>Total</span>
-              <strong>{formatCurrency(totalIncome)}</strong>
+              <strong>{formatCurrency(advice.totalIncome)}</strong>
             </div>
           </Card>
 
@@ -376,31 +306,35 @@ function Dashboard() {
 
             <div className="breakdown-row total-row">
               <span>Total Expenses</span>
-              <strong>{formatCurrency(totalExpenses)}</strong>
+              <strong>{formatCurrency(advice.totalExpenses)}</strong>
             </div>
           </Card>
         </div>
 
         <div className="dashboard-sidebar">
-          <Card className={`insight-card ${insightState}`}>
+          <Card className={`insight-card ${advice.insightState}`}>
             <div className="card-title-row">
               <h3>Financial Insight</h3>
-              <Tooltip text="These insights are generated based on your debt, leftover money, and overall savings position." />
+              <Tooltip text="This insight is based on your income, expenses, debt, savings, and selected goal." />
             </div>
 
-            <p className="insight-title">{insightTitle}</p>
-            <p className="insight-text">{insightMessage}</p>
+            <p className="insight-title">{advice.insightTitle}</p>
+            <p className="insight-text">{advice.insightMessage}</p>
 
             <details>
               <summary>Learn More</summary>
-              <p>{insightDetails}</p>
+              <p>{advice.insightDetails}</p>
             </details>
           </Card>
 
-          <Card>
-            <h3>Recommended Strategy Track</h3>
-            <p className="recommendation-title">{recommendedTrack}</p>
-            <p>{recommendedTrackMessage}</p>
+          <Card className="recommended-track-card">
+            <div className="card-title-row">
+              <h3>Recommended Strategy Track</h3>
+              <Tooltip text="This recommendation changes based on your current financial profile and goal." />
+            </div>
+
+            <p className="recommendation-title">{advice.recommendedTrack}</p>
+            <p>{advice.recommendedTrackMessage}</p>
           </Card>
 
           <Card>

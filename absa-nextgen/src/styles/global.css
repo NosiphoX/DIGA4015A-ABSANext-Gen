@@ -806,3 +806,350 @@ details p {
     display: block;
   }
 }
+
+/* ================================
+   FOCUSED ONBOARDING EXPERIENCE
+================================ */
+
+.onboarding-focus-page {
+  min-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 0 3rem;
+}
+
+.onboarding-focus-hero {
+  max-width: 760px;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+.onboarding-focus-hero h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  margin: 0.6rem 0;
+  line-height: 1.05;
+}
+
+.onboarding-focus-hero p {
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.onboarding-focus-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1.5rem;
+  align-items: stretch;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.onboarding-card {
+  min-height: 520px;
+  padding: 2rem;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-card::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -90px;
+  top: -90px;
+  background: radial-gradient(circle, rgba(251, 208, 216, 0.75), transparent 65%);
+  pointer-events: none;
+}
+
+.onboarding-top-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.step-label,
+.side-panel-label {
+  color: var(--red-primary);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.45rem;
+}
+
+.onboarding-top-row h2 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.step-indicator.compact {
+  margin-bottom: 0;
+}
+
+.onboarding-step {
+  position: relative;
+  z-index: 1;
+  min-height: 300px;
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.onboarding-side-panel {
+  border-radius: 28px;
+  padding: 1.6rem;
+  background:
+    radial-gradient(circle at top left, rgba(251, 208, 216, 0.7), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(201, 224, 248, 0.8), transparent 42%),
+    var(--white);
+  border: 1px solid rgba(232, 234, 237, 0.9);
+  box-shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-side-panel::after {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  right: -40px;
+  bottom: -40px;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 54, 76, 0.25);
+}
+
+.onboarding-side-panel h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.onboarding-side-panel p {
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.mini-profile-list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.mini-profile-list span {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(232, 234, 237, 0.9);
+  border-radius: 14px;
+  padding: 0.8rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.disabled-btn,
+.disabled-btn:hover {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Make the buttons feel less static */
+
+.onboarding-actions .primary-btn,
+.onboarding-actions .secondary-dark {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.onboarding-actions .primary-btn:hover:not(:disabled),
+.onboarding-actions .secondary-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(31, 41, 55, 0.14);
+}
+
+@media (max-width: 920px) {
+  .onboarding-focus-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-side-panel {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .onboarding-focus-page {
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+
+  .onboarding-top-row {
+    flex-direction: column;
+  }
+
+  .identity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-card {
+    min-height: auto;
+  }
+}
+
+.insight-card.neutral {
+  border-left: 5px solid var(--blue-soft);
+}
+
+.insight-card.risk {
+  border-left: 5px solid var(--red-primary);
+}
+
+.insight-card.caution {
+  border-left: 5px solid #f59e0b;
+}
+
+.insight-card.strong {
+  border-left: 5px solid #2ecc71;
+}
+
+.insight-title,
+.recommendation-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0.85rem 0 0.55rem;
+  line-height: 1.45;
+}
+
+.insight-text,
+.recommended-track-card p {
+  line-height: 1.75;
+}
+
+.recommended-track-card {
+  border-left: 5px solid var(--blue-primary);
+}
+.insight-card.neutral {
+  border-left: 5px solid var(--blue-soft);
+}
+
+.insight-card.risk {
+  border-left: 5px solid var(--red-primary);
+}
+
+.insight-card.caution {
+  border-left: 5px solid #f59e0b;
+}
+
+.insight-card.strong {
+  border-left: 5px solid #2ecc71;
+}
+
+.insight-title,
+.recommendation-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0.85rem 0 0.55rem;
+  line-height: 1.45;
+}
+
+.insight-text,
+.recommended-track-card p {
+  line-height: 1.75;
+}
+
+/* ================================
+   ONBOARDING SPACING REFINEMENT
+================================ */
+
+.onboarding-focus-layout {
+  gap: 2rem;
+}
+
+.onboarding-card {
+  padding: 2.4rem;
+}
+
+.onboarding-top-row {
+  margin-bottom: 2.4rem;
+}
+
+.onboarding-step {
+  padding-top: 0.25rem;
+}
+
+.onboarding-step .form-intro {
+  max-width: 680px;
+  font-size: 1rem;
+  line-height: 1.85;
+  margin-bottom: 2rem;
+}
+
+.input-grid {
+  gap: 1.5rem;
+}
+
+.input-group {
+  gap: 0.75rem;
+}
+
+.input-group label {
+  line-height: 1.4;
+}
+
+.input-group input,
+.input-group select {
+  min-height: 52px;
+  line-height: 1.4;
+}
+
+.identity-grid {
+  gap: 1.5rem;
+}
+
+.personality-preview {
+  padding: 1.7rem;
+}
+
+.personality-preview h3 {
+  line-height: 1.25;
+  margin: 0.6rem 0 0.75rem;
+}
+
+.personality-preview p {
+  line-height: 1.85;
+}
+
+.onboarding-actions {
+  margin-top: 2.6rem;
+}
+
+.onboarding-side-panel {
+  padding: 1.9rem;
+}
+
+.onboarding-side-panel h3 {
+  line-height: 1.25;
+}
+
+.onboarding-side-panel p {
+  line-height: 1.85;
+}
+
+.mini-profile-list {
+  gap: 1rem;
+}
+
+.mini-profile-list span {
+  line-height: 1.45;
+  padding: 1rem;
+}
